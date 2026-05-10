@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Remove-Item \"D:\\\\Github\\\\financeiro\\\\backend\\\\src\\\\app.js\" -Force)",
+      "Bash(node src/scripts/seed.js)",
+      "Bash(node -e ' *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)"
+    ]
+  }
+}
