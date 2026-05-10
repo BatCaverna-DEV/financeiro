@@ -11,7 +11,7 @@
 
     <div class="ms-auto d-flex align-items-center gap-2">
       <span class="text-muted small d-none d-sm-inline">
-        Olá, <strong>{{ authStore.user?.username }}</strong>
+        Olá, <strong>{{ authStore.user?.nome || authStore.user?.username }}</strong>
       </span>
     </div>
   </header>

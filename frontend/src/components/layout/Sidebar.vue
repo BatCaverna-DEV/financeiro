@@ -42,7 +42,7 @@
           <i class="bi bi-person-fill"></i>
         </div>
         <div class="flex-grow-1 overflow-hidden">
-          <p class="mb-0 fw-semibold text-truncate small">{{ authStore.user?.username }}</p>
+          <p class="mb-0 fw-semibold text-truncate small">{{ authStore.user?.nome || authStore.user?.username }}</p>
           <p class="mb-0 text-muted" style="font-size: 0.7rem;">Administrador</p>
         </div>
         <button class="btn btn-sm btn-link text-danger p-0" title="Sair" @click="handleLogout">

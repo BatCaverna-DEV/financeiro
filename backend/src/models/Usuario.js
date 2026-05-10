@@ -10,6 +10,10 @@ Usuario.init(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+    nome: {
+      type: DataTypes.STRING(150),
+      allowNull: true,
+    },
     username: {
       type: DataTypes.STRING(100),
       allowNull: false,

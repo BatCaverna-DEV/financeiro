@@ -4,7 +4,7 @@ import { Usuario } from '../models/index.js';
 
 export async function register(req, res) {
   try {
-    const { username, password } = req.body;
+    const { nome, username, password } = req.body;
 
     if (!username || !password) {
       return res.status(400).json({ error: 'Username e password são obrigatórios' });
@@ -16,13 +16,13 @@ export async function register(req, res) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const usuario = await Usuario.create({ username, password: hashedPassword });
+    const usuario = await Usuario.create({ nome: nome || null, username, password: hashedPassword });
 
     const token = jwt.sign({ id: usuario.id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN || '1h',
     });
 
-    return res.status(201).json({ token, user: { id: usuario.id, username: usuario.username } });
+    return res.status(201).json({ token, user: { id: usuario.id, nome: usuario.nome, username: usuario.username } });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Erro interno do servidor' });
@@ -51,7 +51,7 @@ export async function login(req, res) {
       expiresIn: process.env.JWT_EXPIRES_IN || '1h',
     });
 
-    return res.json({ token, user: { id: usuario.id, username: usuario.username } });
+    return res.json({ token, user: { id: usuario.id, nome: usuario.nome, username: usuario.username } });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Erro interno do servidor' });
@@ -61,7 +61,7 @@ export async function login(req, res) {
 export async function me(req, res) {
   try {
     const usuario = await Usuario.findByPk(req.userId, {
-      attributes: ['id', 'username', 'status', 'categoria', 'createdAt'],
+      attributes: ['id', 'nome', 'username', 'status', 'categoria', 'createdAt'],
     });
     if (!usuario) {
       return res.status(404).json({ error: 'Usuário não encontrado' });
