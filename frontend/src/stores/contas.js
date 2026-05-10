@@ -47,5 +47,14 @@ export const useContasStore = defineStore('contas', () => {
     return data
   }
 
-  return { contas, loading, error, saldoTotal, fetchAll, create, update, remove, depositar }
+  async function transferir(payload) {
+    const { data } = await api.post('/contas/transferir', payload)
+    const idxOrigem  = contas.value.findIndex(c => c.id === data.origem.id)
+    const idxDestino = contas.value.findIndex(c => c.id === data.destino.id)
+    if (idxOrigem  !== -1) contas.value[idxOrigem]  = data.origem
+    if (idxDestino !== -1) contas.value[idxDestino] = data.destino
+    return data
+  }
+
+  return { contas, loading, error, saldoTotal, fetchAll, create, update, remove, depositar, transferir }
 })

@@ -1,5 +1,5 @@
 import sequelize from '../config/database.js';
-import { Conta, Transacao } from '../models/index.js';
+import { Conta, Movimentacao, Transacao } from '../models/index.js';
 
 export async function index(req, res) {
   try {
@@ -90,6 +90,60 @@ export async function destroy(req, res) {
   }
 }
 
+export async function transferir(req, res) {
+  try {
+    const { conta_origem_id, conta_destino_id, valor, descricao = 'Transferência' } = req.body;
+
+    if (!conta_origem_id || !conta_destino_id || !valor) {
+      return res.status(400).json({ error: 'Campos obrigatórios: conta_origem_id, conta_destino_id, valor' });
+    }
+    if (conta_origem_id === conta_destino_id) {
+      return res.status(400).json({ error: 'As contas de origem e destino devem ser diferentes' });
+    }
+    if (parseFloat(valor) <= 0) {
+      return res.status(400).json({ error: 'Valor deve ser maior que zero' });
+    }
+
+    const [origem, destino] = await Promise.all([
+      Conta.findOne({ where: { id: conta_origem_id, usuarios_id: req.userId, status: 1 } }),
+      Conta.findOne({ where: { id: conta_destino_id, usuarios_id: req.userId, status: 1 } }),
+    ]);
+
+    if (!origem)  return res.status(404).json({ error: 'Conta de origem não encontrada' });
+    if (!destino) return res.status(404).json({ error: 'Conta de destino não encontrada' });
+
+    const valorNum = parseFloat(valor);
+    const hoje = new Date().toISOString().split('T')[0];
+
+    const t = await sequelize.transaction();
+    try {
+      await Conta.increment({ saldo: -valorNum }, { where: { id: origem.id },  transaction: t });
+      await Conta.increment({ saldo:  valorNum }, { where: { id: destino.id }, transaction: t });
+
+      await Transacao.create({
+        tipo:             'transferencia',
+        descricao,
+        valor:            valorNum,
+        contas_id:        origem.id,
+        conta_destino_id: destino.id,
+        referencia_tipo:  'transferencia',
+        usuarios_id:      req.userId,
+      }, { transaction: t });
+
+      await t.commit();
+    } catch (e) {
+      await t.rollback();
+      throw e;
+    }
+
+    await Promise.all([origem.reload(), destino.reload()]);
+    return res.json({ origem, destino });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+}
+
 export async function depositar(req, res) {
   try {
     const { valor, descricao = 'Depósito de salário' } = req.body;
@@ -112,12 +166,22 @@ export async function depositar(req, res) {
         transaction: t,
       });
 
-      await Transacao.create({
+      const movimentacao = await Movimentacao.create({
         tipo: 1,
         descricao,
         data: new Date().toISOString().split('T')[0],
         valor: parseFloat(valor),
         contas_id: conta.id,
+      }, { transaction: t });
+
+      await Transacao.create({
+        tipo:            'receita',
+        descricao,
+        valor:           parseFloat(valor),
+        contas_id:       conta.id,
+        referencia_id:   movimentacao.id,
+        referencia_tipo: 'movimentacao',
+        usuarios_id:     req.userId,
       }, { transaction: t });
 
       await t.commit();

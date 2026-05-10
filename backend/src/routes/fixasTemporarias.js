@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { index, show, store, update, destroy, pagar, despagar } from '../controllers/fixasController.js';
+import { index, show, store, update, destroy, pagar, despagar } from '../controllers/fixasTemporariasController.js';
 
 const router = Router();
 
@@ -9,7 +9,7 @@ router.get('/:id',        show);
 router.put('/:id',        update);
 router.delete('/:id',     destroy);
 
-router.post('/:id/pagar',    pagar);
-router.delete('/:id/pagar',  despagar);
+router.post('/:id/pagar',   pagar);
+router.delete('/:id/pagar', despagar);
 
 export default router;

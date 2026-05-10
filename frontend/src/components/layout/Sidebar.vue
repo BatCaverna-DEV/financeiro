@@ -23,9 +23,9 @@
         <span>Despesas Fixas</span>
       </RouterLink>
 
-      <RouterLink to="/transacoes" class="sidebar-link" @click="$emit('close')">
+      <RouterLink to="/movimentacoes" class="sidebar-link" @click="$emit('close')">
         <i class="bi bi-arrow-left-right"></i>
-        <span>Transações</span>
+        <span>Movimentações</span>
       </RouterLink>
 
       <p class="sidebar-section-label mt-3">CONFIGURAÇÕES</p>

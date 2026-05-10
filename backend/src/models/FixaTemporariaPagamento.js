@@ -1,37 +1,34 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
-class Fixa extends Model {}
+class FixaTemporariaPagamento extends Model {}
 
-Fixa.init(
+FixaTemporariaPagamento.init(
   {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    descricao: {
-      type: DataTypes.STRING(100),
+    fixas_temporarias_id: {
+      type: DataTypes.UUID,
       allowNull: false,
     },
-    status: {
+    mes: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
-      comment: '1=ativa, 0=encerrada',
     },
-    valor: {
+    ano: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    valor_pago: {
       type: DataTypes.DECIMAL(20, 2),
       allowNull: false,
       get() {
-        const val = this.getDataValue('valor');
+        const val = this.getDataValue('valor_pago');
         return val !== null ? parseFloat(val) : null;
       },
-    },
-    tipo: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      comment: '1=valor fixo, 2=valor variavel',
     },
     contas_id: {
       type: DataTypes.UUID,
@@ -40,9 +37,12 @@ Fixa.init(
   },
   {
     sequelize,
-    modelName: 'Fixa',
-    tableName: 'fixas',
+    modelName: 'FixaTemporariaPagamento',
+    tableName: 'dividas_pagamentos',
+    indexes: [
+      { unique: true, fields: ['fixas_temporarias_id', 'mes', 'ano'] },
+    ],
   }
 );
 
-export default Fixa;
+export default FixaTemporariaPagamento;

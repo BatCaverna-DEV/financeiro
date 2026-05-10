@@ -6,10 +6,16 @@
         <h4 class="mb-0 fw-bold">Contas</h4>
         <small class="text-muted">Gerencie suas contas bancárias e carteiras</small>
       </div>
-      <button class="btn btn-primary d-flex align-items-center gap-2" @click="openCreate">
-        <i class="bi bi-plus-lg"></i>
-        <span class="d-none d-sm-inline">Nova Conta</span>
-      </button>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-primary d-flex align-items-center gap-2" @click="openTransferencia()" :disabled="store.contas.length < 2">
+          <i class="bi bi-arrow-left-right"></i>
+          <span class="d-none d-sm-inline">Transferir</span>
+        </button>
+        <button class="btn btn-primary d-flex align-items-center gap-2" @click="openCreate">
+          <i class="bi bi-plus-lg"></i>
+          <span class="d-none d-sm-inline">Nova Conta</span>
+        </button>
+      </div>
     </div>
 
     <!-- Card de resumo -->
@@ -70,15 +76,20 @@
               >
                 <i class="bi bi-three-dots-vertical"></i>
               </button>
-              <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-1" style="min-width: 170px">
+              <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-1" style="min-width: 180px">
                 <li>
                   <button class="dropdown-item small py-2" @click="openDepositar(conta)">
                     <i class="bi bi-arrow-down-circle text-success me-2"></i>Depositar
                   </button>
                 </li>
                 <li>
+                  <button class="dropdown-item small py-2" @click="openTransferencia(conta)" :disabled="store.contas.length < 2">
+                    <i class="bi bi-arrow-left-right text-primary me-2"></i>Transferir
+                  </button>
+                </li>
+                <li>
                   <button class="dropdown-item small py-2" @click="openEdit(conta)">
-                    <i class="bi bi-pencil text-primary me-2"></i>Editar
+                    <i class="bi bi-pencil text-secondary me-2"></i>Editar
                   </button>
                 </li>
                 <li><hr class="dropdown-divider my-1"></li>
@@ -118,8 +129,9 @@
     </div>
 
     <!-- Modais -->
-    <ContaModal    ref="contaModalRef"    @saved="store.fetchAll()" />
-    <DepositarModal ref="depositarModalRef" @deposited="store.fetchAll()" />
+    <ContaModal         ref="contaModalRef"         @saved="store.fetchAll()" />
+    <DepositarModal     ref="depositarModalRef"      @deposited="store.fetchAll()" />
+    <TransferenciaModal ref="transferenciaModalRef"  @transferred="store.fetchAll()" />
     <ConfirmModal
       ref="confirmModalRef"
       title="Excluir conta"
@@ -136,23 +148,26 @@
 import { ref, onMounted } from 'vue'
 import { useContasStore } from '@/stores/contas.js'
 import { useFormatters } from '@/composables/useFormatters.js'
-import ContaModal     from '@/components/contas/ContaModal.vue'
-import DepositarModal from '@/components/contas/DepositarModal.vue'
-import ConfirmModal   from '@/components/shared/ConfirmModal.vue'
+import ContaModal         from '@/components/contas/ContaModal.vue'
+import DepositarModal     from '@/components/contas/DepositarModal.vue'
+import TransferenciaModal from '@/components/contas/TransferenciaModal.vue'
+import ConfirmModal       from '@/components/shared/ConfirmModal.vue'
 
 const store = useContasStore()
 const { formatCurrency } = useFormatters()
 
-const contaModalRef     = ref(null)
-const depositarModalRef = ref(null)
-const confirmModalRef   = ref(null)
-const contaParaExcluir  = ref(null)
+const contaModalRef        = ref(null)
+const depositarModalRef    = ref(null)
+const transferenciaModalRef = ref(null)
+const confirmModalRef      = ref(null)
+const contaParaExcluir     = ref(null)
 
 onMounted(() => store.fetchAll())
 
-function openCreate()        { contaModalRef.value.open() }
-function openEdit(conta)     { contaModalRef.value.open(conta) }
-function openDepositar(conta){ depositarModalRef.value.open(conta) }
+function openCreate()              { contaModalRef.value.open() }
+function openEdit(conta)           { contaModalRef.value.open(conta) }
+function openDepositar(conta)      { depositarModalRef.value.open(conta) }
+function openTransferencia(conta)  { transferenciaModalRef.value.open(conta) }
 
 function openDelete(conta) {
   contaParaExcluir.value = conta

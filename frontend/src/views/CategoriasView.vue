@@ -49,7 +49,7 @@
         <div v-if="store.categorias.length === 0" class="text-center py-5">
           <i class="bi bi-tags text-muted d-block mb-3" style="font-size: 3rem; opacity: .3"></i>
           <p class="fw-semibold mb-1">Nenhuma categoria cadastrada</p>
-          <p class="text-muted small mb-3">Crie categorias para organizar melhor suas transações.</p>
+          <p class="text-muted small mb-3">Crie categorias para organizar melhor suas movimentações.</p>
           <button class="btn btn-primary btn-sm" @click="openCreate">
             <i class="bi bi-plus-lg me-1"></i>Criar primeira categoria
           </button>

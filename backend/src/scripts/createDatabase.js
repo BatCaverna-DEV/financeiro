@@ -34,6 +34,6 @@ console.log('Sincronizando tabelas com Sequelize...');
 await sequelize.sync({ force: false });
 
 console.log('\nTabelas criadas/verificadas com sucesso!');
-console.log('Tabelas: usuarios, contas, categoria, fixas, transacoes');
+console.log('Tabelas: usuarios, contas, categoria, fixas, fixas_pagamentos, dividas, dividas_pagamentos, movimentacoes');
 
 await sequelize.close();

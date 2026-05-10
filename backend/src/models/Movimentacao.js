@@ -1,24 +1,27 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
-class Fixa extends Model {}
+class Movimentacao extends Model {}
 
-Fixa.init(
+Movimentacao.init(
   {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+    tipo: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      comment: '1=receita, 2=despesa',
+    },
     descricao: {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
-    status: {
-      type: DataTypes.INTEGER,
+    data: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
-      defaultValue: 1,
-      comment: '1=ativa, 0=encerrada',
     },
     valor: {
       type: DataTypes.DECIMAL(20, 2),
@@ -28,21 +31,20 @@ Fixa.init(
         return val !== null ? parseFloat(val) : null;
       },
     },
-    tipo: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      comment: '1=valor fixo, 2=valor variavel',
-    },
     contas_id: {
       type: DataTypes.UUID,
       allowNull: false,
     },
+    categoria_id: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
   },
   {
     sequelize,
-    modelName: 'Fixa',
-    tableName: 'fixas',
+    modelName: 'Movimentacao',
+    tableName: 'movimentacoes',
   }
 );
 
-export default Fixa;
+export default Movimentacao;

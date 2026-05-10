@@ -165,18 +165,18 @@
           </div>
         </div>
 
-        <!-- Transações recentes -->
+        <!-- Movimentações recentes -->
         <div class="col-lg-8">
           <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3">
-              <span class="fw-semibold">Últimas Transações</span>
-              <RouterLink to="/transacoes" class="btn btn-sm btn-outline-primary">
+              <span class="fw-semibold">Últimas Movimentações</span>
+              <RouterLink to="/movimentacoes" class="btn btn-sm btn-outline-primary">
                 <i class="bi bi-plus-lg me-1"></i>Nova
               </RouterLink>
             </div>
             <div class="card-body p-0">
-              <div v-if="store.ultimasTransacoes.length === 0" class="text-center py-5 text-muted small">
-                <i class="bi bi-arrow-left-right d-block fs-3 mb-2"></i>Nenhuma transação neste período
+              <div v-if="store.ultimasMovimentacoes.length === 0" class="text-center py-5 text-muted small">
+                <i class="bi bi-arrow-left-right d-block fs-3 mb-2"></i>Nenhuma movimentação neste período
               </div>
               <div v-else class="table-responsive">
                 <table class="table table-hover mb-0 align-middle">
@@ -190,7 +190,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="t in store.ultimasTransacoes" :key="t.id">
+                    <tr v-for="t in store.ultimasMovimentacoes" :key="t.id">
                       <td class="px-4 small text-muted">{{ formatDate(t.data) }}</td>
                       <td class="small fw-medium">{{ t.descricao }}</td>
                       <td class="small text-muted">{{ t.conta?.descricao ?? '-' }}</td>
@@ -208,9 +208,9 @@
                 </table>
               </div>
             </div>
-            <div v-if="store.transacoes.length > 8" class="card-footer bg-white text-center border-top py-2">
-              <RouterLink to="/transacoes" class="small text-primary text-decoration-none">
-                Ver todas as transações <i class="bi bi-arrow-right ms-1"></i>
+            <div v-if="store.movimentacoes.length > 8" class="card-footer bg-white text-center border-top py-2">
+              <RouterLink to="/movimentacoes" class="small text-primary text-decoration-none">
+                Ver todas as movimentações <i class="bi bi-arrow-right ms-1"></i>
               </RouterLink>
             </div>
           </div>

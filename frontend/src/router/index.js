@@ -6,7 +6,7 @@ import LoginView       from '@/views/LoginView.vue'
 import DashboardView   from '@/views/DashboardView.vue'
 import ContasView      from '@/views/ContasView.vue'
 import FixasView       from '@/views/FixasView.vue'
-import TransacoesView  from '@/views/TransacoesView.vue'
+import MovimentacoesView from '@/views/MovimentacoesView.vue'
 import CategoriasView  from '@/views/CategoriasView.vue'
 
 const routes = [
@@ -24,7 +24,7 @@ const routes = [
       { path: 'dashboard', component: DashboardView,  meta: { title: 'Dashboard' } },
       { path: 'contas',    component: ContasView,     meta: { title: 'Contas' } },
       { path: 'fixas',     component: FixasView,      meta: { title: 'Despesas Fixas' } },
-      { path: 'transacoes',component: TransacoesView, meta: { title: 'Transações' } },
+      { path: 'movimentacoes', component: MovimentacoesView, meta: { title: 'Movimentações' } },
       { path: 'categorias',component: CategoriasView, meta: { title: 'Categorias' } },
     ],
   },

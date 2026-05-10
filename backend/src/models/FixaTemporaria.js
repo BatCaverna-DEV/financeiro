@@ -1,9 +1,9 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
-class Fixa extends Model {}
+class FixaTemporaria extends Model {}
 
-Fixa.init(
+FixaTemporaria.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -19,6 +19,14 @@ Fixa.init(
       allowNull: false,
       defaultValue: 1,
       comment: '1=ativa, 0=encerrada',
+    },
+    inicio: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    fim: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
     },
     valor: {
       type: DataTypes.DECIMAL(20, 2),
@@ -40,9 +48,9 @@ Fixa.init(
   },
   {
     sequelize,
-    modelName: 'Fixa',
-    tableName: 'fixas',
+    modelName: 'FixaTemporaria',
+    tableName: 'dividas',
   }
 );
 
-export default Fixa;
+export default FixaTemporaria;
