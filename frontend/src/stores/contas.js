@@ -7,7 +7,11 @@ export const useContasStore = defineStore('contas', () => {
   const loading = ref(false)
   const error   = ref(null)
 
-  const saldoTotal = computed(() => contas.value.reduce((s, c) => s + Number(c.saldo), 0))
+  const contasPrincipais = computed(() => contas.value.filter(c => c.principal))
+  const saldoTotal = computed(() => {
+    const base = contasPrincipais.value.length > 0 ? contasPrincipais.value : contas.value
+    return base.reduce((s, c) => s + Number(c.saldo), 0)
+  })
 
   async function fetchAll() {
     loading.value = true
@@ -30,9 +34,17 @@ export const useContasStore = defineStore('contas', () => {
 
   async function update(id, payload) {
     const { data } = await api.put(`/contas/${id}`, payload)
+    // Se a conta foi definida como principal, desmarca as demais no estado local
+    if (payload.principal) {
+      contas.value.forEach(c => { if (c.id !== id) c.principal = false })
+    }
     const idx = contas.value.findIndex(c => c.id === id)
     if (idx !== -1) contas.value[idx] = data
     return data
+  }
+
+  async function setAsPrincipal(id) {
+    return update(id, { principal: true })
   }
 
   async function remove(id) {
@@ -56,5 +68,5 @@ export const useContasStore = defineStore('contas', () => {
     return data
   }
 
-  return { contas, loading, error, saldoTotal, fetchAll, create, update, remove, depositar, transferir }
+  return { contas, contasPrincipais, loading, error, saldoTotal, fetchAll, create, update, remove, depositar, transferir, setAsPrincipal }
 })

@@ -29,15 +29,23 @@ export async function show(req, res) {
   }
 }
 
+async function demotePrincipal(userId, excludeId = null) {
+  const where = { usuarios_id: userId, principal: true };
+  if (excludeId) where.id = { [require('sequelize').Op.ne]: excludeId };
+  await Conta.update({ principal: false }, { where });
+}
+
 export async function store(req, res) {
   try {
-    const { descricao, icone = 'bi-wallet2', saldo = 0 } = req.body;
+    const { descricao, icone = 'bi-wallet2', saldo = 0, principal = false } = req.body;
 
     if (!descricao) {
       return res.status(400).json({ error: 'Descrição é obrigatória' });
     }
 
-    const conta = await Conta.create({ descricao, icone, saldo, usuarios_id: req.userId });
+    if (principal) await demotePrincipal(req.userId);
+
+    const conta = await Conta.create({ descricao, icone, saldo, principal: !!principal, usuarios_id: req.userId });
     return res.status(201).json(conta);
   } catch (err) {
     console.error(err);
@@ -54,16 +62,19 @@ export async function update(req, res) {
       return res.status(404).json({ error: 'Conta não encontrada' });
     }
 
-    const { descricao, icone, status } = req.body;
+    const { descricao, icone, status, principal } = req.body;
     const fields = {};
 
-    if (descricao !== undefined) fields.descricao = descricao;
-    if (icone     !== undefined) fields.icone     = icone;
-    if (status    !== undefined) fields.status    = status;
+    if (descricao  !== undefined) fields.descricao  = descricao;
+    if (icone      !== undefined) fields.icone      = icone;
+    if (status     !== undefined) fields.status     = status;
+    if (principal  !== undefined) fields.principal  = !!principal;
 
     if (Object.keys(fields).length === 0) {
       return res.status(400).json({ error: 'Nenhum campo para atualizar' });
     }
+
+    if (fields.principal) await demotePrincipal(req.userId, conta.id);
 
     await conta.update(fields);
     return res.json(conta);

@@ -28,6 +28,11 @@ Conta.init(
         return val !== null ? parseFloat(val) : null;
       },
     },
+    principal: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     status: {
       type: DataTypes.INTEGER,
       allowNull: false,

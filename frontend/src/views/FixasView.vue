@@ -74,6 +74,82 @@
       </div>
     </div>
 
+    <!-- Breakdown Fixas vs Dívidas -->
+    <div class="row g-3 mb-4">
+      <div class="col-sm-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body py-3 px-4">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <i class="bi bi-arrow-repeat text-primary"></i>
+              <span class="fw-semibold small">Despesas Fixas</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-end">
+              <div>
+                <div class="text-muted" style="font-size:.72rem">TOTAL</div>
+                <div class="fw-bold">{{ formatCurrency(fixasStore.totalMes) }}</div>
+              </div>
+              <div class="text-end">
+                <div class="text-muted" style="font-size:.72rem">PAGO</div>
+                <div class="fw-semibold text-success small">{{ formatCurrency(fixasStore.totalPago) }}</div>
+              </div>
+              <div class="text-end">
+                <div class="text-muted" style="font-size:.72rem">PENDENTE</div>
+                <div class="fw-semibold text-danger small">{{ formatCurrency(fixasStore.totalPendente) }}</div>
+              </div>
+              <div class="text-end">
+                <div class="text-muted" style="font-size:.72rem">ITENS</div>
+                <div class="fw-semibold small">
+                  {{ fixasStore.fixas.filter(f => f.pagamento).length }}/{{ fixasStore.fixas.length }}
+                </div>
+              </div>
+            </div>
+            <div class="progress mt-2" style="height:4px">
+              <div
+                class="progress-bar bg-primary"
+                :style="{ width: fixasStore.totalMes > 0 ? (fixasStore.totalPago / fixasStore.totalMes * 100) + '%' : '0%' }"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body py-3 px-4">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <i class="bi bi-calendar-range text-warning"></i>
+              <span class="fw-semibold small">Dívidas</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-end">
+              <div>
+                <div class="text-muted" style="font-size:.72rem">TOTAL</div>
+                <div class="fw-bold">{{ formatCurrency(tempStore.totalMes) }}</div>
+              </div>
+              <div class="text-end">
+                <div class="text-muted" style="font-size:.72rem">PAGO</div>
+                <div class="fw-semibold text-success small">{{ formatCurrency(tempStore.totalPago) }}</div>
+              </div>
+              <div class="text-end">
+                <div class="text-muted" style="font-size:.72rem">PENDENTE</div>
+                <div class="fw-semibold text-danger small">{{ formatCurrency(tempStore.totalPendente) }}</div>
+              </div>
+              <div class="text-end">
+                <div class="text-muted" style="font-size:.72rem">ITENS</div>
+                <div class="fw-semibold small">
+                  {{ tempStore.fixas.filter(f => f.pagamento).length }}/{{ tempStore.fixas.length }}
+                </div>
+              </div>
+            </div>
+            <div class="progress mt-2" style="height:4px">
+              <div
+                class="progress-bar bg-warning"
+                :style="{ width: tempStore.totalMes > 0 ? (tempStore.totalPago / tempStore.totalMes * 100) + '%' : '0%' }"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Barra de progresso geral -->
     <div v-if="totalItens > 0" class="card border-0 shadow-sm mb-4">
       <div class="card-body py-3">

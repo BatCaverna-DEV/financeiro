@@ -28,6 +28,13 @@
         <span>Movimentações</span>
       </RouterLink>
 
+      <p class="sidebar-section-label mt-3">RELATÓRIOS</p>
+
+<RouterLink to="/relatorios/visao-geral" class="sidebar-link" @click="$emit('close')">
+        <i class="bi bi-bar-chart-line"></i>
+        <span>Visão Geral</span>
+      </RouterLink>
+
       <p class="sidebar-section-label mt-3">CONFIGURAÇÕES</p>
 
       <RouterLink to="/categorias" class="sidebar-link" @click="$emit('close')">

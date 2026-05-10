@@ -9,7 +9,11 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const loading       = ref(false)
   const error         = ref(null)
 
-  const saldoTotal          = computed(() => contas.value.reduce((s, c) => s + Number(c.saldo), 0))
+  const saldoTotal = computed(() => {
+    const principais = contas.value.filter(c => c.principal)
+    const base = principais.length > 0 ? principais : contas.value
+    return base.reduce((s, c) => s + Number(c.saldo), 0)
+  })
   const receitasMes         = computed(() => movimentacoes.value.filter(t => t.tipo === 1).reduce((s, t) => s + Number(t.valor), 0))
   const despesasMes         = computed(() => movimentacoes.value.filter(t => t.tipo === 2).reduce((s, t) => s + Number(t.valor), 0))
   const fixasAtivas         = computed(() => fixas.value.filter(f => f.status === 1).length)

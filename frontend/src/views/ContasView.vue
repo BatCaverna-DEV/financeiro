@@ -7,7 +7,7 @@
         <small class="text-muted">Gerencie suas contas bancárias e carteiras</small>
       </div>
       <div class="d-flex gap-2">
-        <button class="btn btn-outline-primary d-flex align-items-center gap-2" @click="openTransferencia()" :disabled="store.contas.length < 2">
+<button class="btn btn-outline-primary d-flex align-items-center gap-2" @click="openTransferencia()" :disabled="store.contas.length < 2">
           <i class="bi bi-arrow-left-right"></i>
           <span class="d-none d-sm-inline">Transferir</span>
         </button>
@@ -20,16 +20,27 @@
 
     <!-- Card de resumo -->
     <div class="summary-card mb-4">
-      <div class="row g-0 align-items-center">
+      <div class="row g-0 align-items-center flex-wrap gap-3">
         <div class="col-auto pe-4 border-end">
-          <p class="summary-label">Saldo total</p>
+          <p class="summary-label">
+            {{ store.contasPrincipais.length > 0 ? 'Saldo principal' : 'Saldo total' }}
+          </p>
           <p class="summary-value" :class="store.saldoTotal >= 0 ? 'text-success' : 'text-danger'">
             {{ formatCurrency(store.saldoTotal) }}
           </p>
         </div>
-        <div class="col ps-4">
+        <div class="col-auto pe-4 border-end">
           <p class="summary-label">Contas ativas</p>
           <p class="summary-value text-dark">{{ store.contas.length }}</p>
+        </div>
+        <div v-if="store.contasPrincipais.length === 0" class="col ps-2">
+          <span class="badge bg-warning-subtle text-warning border border-warning-subtle small">
+            <i class="bi bi-exclamation-triangle me-1"></i>Nenhuma conta principal definida
+          </span>
+        </div>
+        <div v-else class="col ps-2">
+          <p class="summary-label">Principal</p>
+          <p class="summary-value text-dark fs-6">{{ store.contasPrincipais[0].descricao }}</p>
         </div>
       </div>
     </div>
@@ -61,11 +72,16 @@
         :key="conta.id"
         class="col-sm-6 col-xl-4"
       >
-        <div class="conta-card">
+        <div class="conta-card" :class="{ 'conta-card--principal': conta.principal }">
           <!-- Topo: ícone + menu -->
           <div class="d-flex justify-content-between align-items-start mb-3">
-            <div class="conta-icon-wrap" :style="iconBg(conta.icone)">
-              <i class="bi" :class="conta.icone || 'bi-wallet2'"></i>
+            <div class="d-flex align-items-center gap-2">
+              <div class="conta-icon-wrap" :style="iconBg(conta.icone)">
+                <i class="bi" :class="conta.icone || 'bi-wallet2'"></i>
+              </div>
+              <span v-if="conta.principal" class="badge bg-warning-subtle text-warning border border-warning-subtle" style="font-size:.65rem">
+                <i class="bi bi-star-fill me-1"></i>Principal
+              </span>
             </div>
 
             <div class="dropdown">
@@ -85,6 +101,11 @@
                 <li>
                   <button class="dropdown-item small py-2" @click="openTransferencia(conta)" :disabled="store.contas.length < 2">
                     <i class="bi bi-arrow-left-right text-primary me-2"></i>Transferir
+                  </button>
+                </li>
+                <li v-if="!conta.principal">
+                  <button class="dropdown-item small py-2" @click="setPrincipal(conta)">
+                    <i class="bi bi-star text-warning me-2"></i>Definir como principal
                   </button>
                 </li>
                 <li>
@@ -156,11 +177,11 @@ import ConfirmModal       from '@/components/shared/ConfirmModal.vue'
 const store = useContasStore()
 const { formatCurrency } = useFormatters()
 
-const contaModalRef        = ref(null)
-const depositarModalRef    = ref(null)
+const contaModalRef         = ref(null)
+const depositarModalRef     = ref(null)
 const transferenciaModalRef = ref(null)
-const confirmModalRef      = ref(null)
-const contaParaExcluir     = ref(null)
+const confirmModalRef       = ref(null)
+const contaParaExcluir      = ref(null)
 
 onMounted(() => store.fetchAll())
 
@@ -172,6 +193,10 @@ function openTransferencia(conta)  { transferenciaModalRef.value.open(conta) }
 function openDelete(conta) {
   contaParaExcluir.value = conta
   confirmModalRef.value.open()
+}
+
+async function setPrincipal(conta) {
+  await store.setAsPrincipal(conta.id)
 }
 
 async function handleDelete({ done }) {
@@ -247,6 +272,10 @@ function iconBg(icone = '') {
 .conta-card:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,0.1);
   transform: translateY(-2px);
+}
+.conta-card--principal {
+  border: 1.5px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 2px 12px rgba(245, 158, 11, 0.12);
 }
 
 .conta-icon-wrap {

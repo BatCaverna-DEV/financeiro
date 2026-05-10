@@ -58,6 +58,22 @@
               <div class="form-text">Pode ser alterado a qualquer momento via depósitos.</div>
             </div>
 
+            <!-- Conta principal -->
+            <div class="form-check form-switch mt-3">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="switchPrincipal"
+                v-model="form.principal"
+              />
+              <label class="form-check-label fw-medium" for="switchPrincipal">
+                Conta principal
+              </label>
+              <div class="form-text">
+                O saldo desta conta é usado nos totais do sistema. Só uma conta pode ser principal.
+              </div>
+            </div>
+
             <!-- Erro de API -->
             <div v-if="apiError" class="alert alert-danger py-2 small mt-3">
               <i class="bi bi-exclamation-triangle me-1"></i>{{ apiError }}
@@ -108,6 +124,7 @@ const form = reactive({
   descricao: '',
   icone: 'bi-wallet2',
   saldo: 0,
+  principal: false,
 })
 
 onMounted(() => {
@@ -125,12 +142,14 @@ function open(conta = null) {
     form.descricao    = conta.descricao
     form.icone        = conta.icone || 'bi-wallet2'
     form.saldo        = conta.saldo
+    form.principal    = !!conta.principal
   } else {
     isEdit.value   = false
     editId.value   = null
     form.descricao = ''
     form.icone     = 'bi-wallet2'
     form.saldo     = 0
+    form.principal = false
   }
 
   bsModal.show()
@@ -148,9 +167,9 @@ async function handleSubmit() {
   apiError.value = null
   try {
     if (isEdit.value) {
-      await store.update(editId.value, { descricao: form.descricao, icone: form.icone })
+      await store.update(editId.value, { descricao: form.descricao, icone: form.icone, principal: form.principal })
     } else {
-      await store.create({ descricao: form.descricao, icone: form.icone, saldo: form.saldo })
+      await store.create({ descricao: form.descricao, icone: form.icone, saldo: form.saldo, principal: form.principal })
     }
     emit('saved')
     close()
