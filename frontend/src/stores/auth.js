@@ -8,12 +8,21 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!token.value)
 
-  async function login(username, password) {
-    const { data } = await api.post('/auth/login', { username, password })
+  function _persist(data) {
     token.value = data.token
     user.value  = data.user
     localStorage.setItem('token', data.token)
     localStorage.setItem('user', JSON.stringify(data.user))
+  }
+
+  async function login(username, password) {
+    const { data } = await api.post('/auth/login', { username, password })
+    _persist(data)
+  }
+
+  async function register(nome, username, password) {
+    const { data } = await api.post('/auth/register', { nome, username, password })
+    _persist(data)
   }
 
   function logout() {
@@ -23,5 +32,5 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('user')
   }
 
-  return { token, user, isAuthenticated, login, logout }
+  return { token, user, isAuthenticated, login, register, logout }
 })

@@ -8,6 +8,7 @@ import ContasView      from '@/views/ContasView.vue'
 import FixasView       from '@/views/FixasView.vue'
 import MovimentacoesView from '@/views/MovimentacoesView.vue'
 import CategoriasView  from '@/views/CategoriasView.vue'
+import RelatorioView   from '@/views/RelatorioView.vue'
 
 const routes = [
   {
@@ -25,6 +26,7 @@ const routes = [
       { path: 'contas',    component: ContasView,     meta: { title: 'Contas' } },
       { path: 'fixas',     component: FixasView,      meta: { title: 'Despesas Fixas' } },
       { path: 'movimentacoes', component: MovimentacoesView, meta: { title: 'Movimentações' } },
+      { path: 'relatorio', component: RelatorioView,  meta: { title: 'Relatório' } },
       { path: 'categorias',component: CategoriasView, meta: { title: 'Categorias' } },
     ],
   },

@@ -6,7 +6,11 @@
       "Bash(node -e ' *)",
       "Bash(npm install *)",
       "Bash(npm run *)",
-      "PowerShell(New-Item -ItemType Directory -Force -Path \"D:\\\\Github\\\\financeiro\\\\frontend\\\\src\\\\components\\\\fixas\")"
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"D:\\\\Github\\\\financeiro\\\\frontend\\\\src\\\\components\\\\fixas\")",
+      "Bash(Get-ChildItem -Path \"D:\\\\Github\\\\financeiro\" -Recurse -Force)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(ConvertTo-Json)",
+      "Bash(Out-String)"
     ]
   }
 }

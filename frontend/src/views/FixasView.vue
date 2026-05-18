@@ -100,7 +100,12 @@
           @click="activeTab = 'permanentes'"
         >
           <i class="bi bi-arrow-repeat"></i>
-          Permanentes
+          <span>
+            Permanentes
+            <span class="d-block" style="font-size: 0.7rem; font-weight: 600; line-height: 1; opacity: .75">
+              {{ formatCurrency(fixasStore.totalMes) }}
+            </span>
+          </span>
           <span class="badge rounded-pill" :class="activeTab === 'permanentes' ? 'bg-primary' : 'bg-secondary'">
             {{ fixasStore.fixas.length }}
           </span>
@@ -113,7 +118,12 @@
           @click="activeTab = 'temporarias'"
         >
           <i class="bi bi-calendar-range"></i>
-          Dívidas
+          <span>
+            Dívidas
+            <span class="d-block" style="font-size: 0.7rem; font-weight: 600; line-height: 1; opacity: .75">
+              {{ formatCurrency(tempStore.totalMes) }}
+            </span>
+          </span>
           <span class="badge rounded-pill" :class="activeTab === 'temporarias' ? 'bg-warning text-dark' : 'bg-secondary'">
             {{ tempStore.fixas.length }}
           </span>
