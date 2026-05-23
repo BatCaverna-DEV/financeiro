@@ -10,7 +10,11 @@
       "Bash(Get-ChildItem -Path \"D:\\\\Github\\\\financeiro\" -Recurse -Force)",
       "Bash(Select-Object FullName, PSIsContainer)",
       "Bash(ConvertTo-Json)",
-      "Bash(Out-String)"
+      "Bash(Out-String)",
+      "Bash(Get-ChildItem -Path \"D:\\\\Github\\\\financeiro\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)",
+      "Bash(rtk git *)"
     ]
   }
 }
