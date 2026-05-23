@@ -14,7 +14,12 @@
       "Bash(Get-ChildItem -Path \"D:\\\\Github\\\\financeiro\" -Recurse -Directory)",
       "Bash(Select-Object -ExpandProperty FullName)",
       "Bash(Sort-Object)",
-      "Bash(rtk git *)"
+      "Bash(rtk git *)",
+      "Bash(ssh -o StrictHostKeyChecking=no -o PasswordAuthentication=yes root@69.62.97.146 \"echo connected && uname -a && uptime\")",
+      "Bash(python3 -c \"import pexpect; print\\('ok'\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(rtk pip *)",
+      "Bash(rtk npm *)"
     ]
   }
 }
