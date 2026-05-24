@@ -9,6 +9,7 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  base: '/financeiro/',
   server: {
     port: 5173,
     proxy: {
