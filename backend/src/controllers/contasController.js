@@ -31,7 +31,8 @@ export async function show(req, res) {
 
 export async function store(req, res) {
   try {
-    const { descricao, icone = 'bi-wallet2', saldo = 0 } = req.body;
+    const { descricao, icone = 'bi-wallet2', saldo: saldoRaw = 0 } = req.body;
+    const saldo = parseFloat(saldoRaw) || 0;
 
     if (!descricao) {
       return res.status(400).json({ error: 'Descrição é obrigatória' });
